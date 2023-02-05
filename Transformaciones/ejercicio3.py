@@ -8,7 +8,7 @@ img = cv2.imread("cat.jpg")
 canal_verde = img[:,:,1]
 
 # Aplicar la condición y asignar 0 a los valores mayores a 200
-canal_verde = np.where(canal_verde > 100, 0, canal_verde)
+canal_verde = np.where(canal_verde > 200, 0, canal_verde)
 
 # Reemplazar el canal verde en la img original
 img[:,:,1] = canal_verde
