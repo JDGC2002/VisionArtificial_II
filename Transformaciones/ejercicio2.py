@@ -1,4 +1,5 @@
 import cv2 as cv
+import numpy as np
 
 imgF = cv.imread('test_im.jpg')
 imga = cv.imread('test_im-A.jpg')
