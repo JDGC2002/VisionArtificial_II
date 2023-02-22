@@ -38,12 +38,6 @@ for i in range(EPOCHS):
 
     y_gorrito = X @ theta
 
-    # plt.scatter(dataset[:, 0], dataset[:, 1])
-    # plt.plot(dataset[:, 0], y_gorrito, color='red')
-    # plt.xlabel('Area de la casa')
-    # plt.ylabel('Precio')
-    # plt.show()
-
 # nueva y_gorrito
 y_gorrito = X @ theta
 
