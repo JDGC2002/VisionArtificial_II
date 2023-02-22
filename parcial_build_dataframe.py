@@ -19,13 +19,13 @@ def build_dataset():
     data = []
     for img_name in A_images:
         img_path = os.path.join(PATH_A, img_name)
-        img = cv2.imread(img_path)
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         img = np.array(img)
         img = resize_image(img)
         data.append((img, 0))
     for img_name in P_images:
         img_path = os.path.join(PATH_P, img_name)
-        img = cv2.imread(img_path)
+        img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
         img = np.array(img)
         img = resize_image(img)
         data.append((img, 1))
@@ -34,7 +34,7 @@ def build_dataset():
 
 def main():
     df = build_dataset()
-    df.to_csv("dataset_imagenes.csv", index=False)
+    df.to_csv("dataset_imagenes.csv", sep=";", index=False)
 
 if __name__ == '__main__':
     main()
