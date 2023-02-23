@@ -43,17 +43,16 @@ def split_data(df):
     return train, test
 
 def main():
-    dataset = pd.read_csv("dataset_imagenes.csv", sep=";", header=None)
+    dataset = pd.read_csv("dataset_imagenes.csv", sep=";")
     dataset = shuffle_dataset(dataset)
     train, test = split_data(dataset)
-    
-    X = train.iloc[:, 0]
-    y = train.iloc[:, 1]
+    X = train.iloc[:,0]
+    y = train.iloc[:,1]
 
     m = X.shape[0]
-    X_0 = np.ones(m)
+    X_0 = np.ones((m))
     X = np.hstack((X_0,X))
-
+    
     theta = np.random.rand(2)
     y_gorrito = X @ theta
     error = y_gorrito - y
