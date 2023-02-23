@@ -25,7 +25,6 @@ X = np.hstack((X_0,X))
 
 # Parámetros a optimizar
 theta = np.random.rand(2)
-print(theta)
 y_gorrito = X@theta
 error = y_gorrito - y
 
