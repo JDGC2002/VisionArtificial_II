@@ -10,6 +10,7 @@ class LogisticRegression():
         self.n_iters = n_iters
         self.weights = None
         self.bias = None
+        self.costs = []
 
     def fit(self, X, y):
         n_samples, n_features = X.shape
@@ -19,6 +20,9 @@ class LogisticRegression():
         for _ in range(self.n_iters):
             linear_pred = np.dot(X, self.weights) + self.bias
             predictions = sigmoid(linear_pred)
+
+            cost = (-1/n_samples) * np.sum(y*np.log(predictions) + (1-y)*np.log(1-predictions))
+            self.costs.append(cost)
 
             dw = (1/n_samples) * np.dot(X.T, (predictions - y))
             db = (1/n_samples) * np.sum(predictions-y)
