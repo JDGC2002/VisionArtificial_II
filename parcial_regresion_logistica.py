@@ -1,75 +1,34 @@
-import cv2
-import pandas as pd
 import numpy as np
-import matplotlib as plt
 
-LR = 0.02
-EPOCHS = 6
-BATCH_IND = 0
-BATCH_SIZE = 300
-LAMBDA = 1
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
 
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
+class LogisticRegression():
 
-def cost_function(X, y, theta, lmbda):
-    m = X.shape[0]
-    h = sigmoid(X @ theta)
-    J = (-1 / m) * (y.T @ np.log(h) + (1 - y).T @ np.log(1 - h)) + (lmbda / (2 * m)) * np.sum(theta[1:] ** 2)
-    return J
+    def __init__(self, lr=0.001, n_iters=1000):
+        self.lr = lr
+        self.n_iters = n_iters
+        self.weights = None
+        self.bias = None
 
-def gradient(X, y, theta, lmbda):
-    m = X.shape[0]
-    h = sigmoid(X @ theta)
-    grad = (1 / m) * (X.T @ (h - y)) + (lmbda / m) * np.vstack([0, theta[1:]])
-    return grad
+    def fit(self, X, y):
+        n_samples, n_features = X.shape
+        self.weights = np.zeros(n_features)
+        self.bias = 0
 
-def accuracy(h, y):
-    m = y.shape[0]
-    h[h>=0.5] = 1
-    h[h<0.5] = 0
-    c = np.zeros(y.shape)
-    c[y==h] = 1
-    return c.sum()/m
+        for _ in range(self.n_iters):
+            linear_pred = np.dot(X, self.weights) + self.bias
+            predictions = sigmoid(linear_pred)
 
-def shuffle_dataset(df):
-    df = df.sample(frac=1).reset_index(drop=True)
-    return df
+            dw = (1/n_samples) * np.dot(X.T, (predictions - y))
+            db = (1/n_samples) * np.sum(predictions-y)
 
-def split_data(df):
-    p_train = 0.80 # Porcentaje de train.
-    train = df[:int((len(df))*p_train)] 
-    test = df[int((len(df))*p_train):]
-    return train, test
+            self.weights = self.weights - self.lr*dw
+            self.bias = self.bias - self.lr*db
 
-def main():
-    dataset = pd.read_csv("dataset_imagenes.csv", sep=";")
-    dataset = shuffle_dataset(dataset)
-    train, test = split_data(dataset)
-    X = train.iloc[:,0]
-    y = train.iloc[:,1]
 
-    m = X.shape[0]
-    X_0 = np.ones((m))
-    X = np.hstack((X_0,X))
-    
-    theta = np.random.rand(2)
-    y_gorrito = X @ theta
-    error = y_gorrito - y
-
-    for epoch in range(EPOCHS):
-        if epoch > 0:
-            BATCH_IND = BATCH_IND + BATCH_SIZE
-        else:
-            BATCH_IND = 0
-        for i in range(BATCH_SIZE):
-            X_batch = X[BATCH_IND:(BATCH_IND + BATCH_SIZE)]
-            y_batch = y[BATCH_IND:(BATCH_IND + BATCH_SIZE)]
-            grad = gradient(X_batch, y_batch, theta, LAMBDA)
-            theta = theta - LR * grad
-        cost = cost_function(X, y, theta, LAMBDA)
-        train_accuracy = accuracy(sigmoid(X @ theta), y)
-        print("Epoch:", epoch+1, "Cost:", cost, "Training accuracy:", train_accuracy)
-            
-if __name__ == '__main__':
-    main()
+    def predict(self, X):
+        linear_pred = np.dot(X, self.weights) + self.bias
+        y_pred = sigmoid(linear_pred)
+        class_pred = [0 if y<=0.5 else 1 for y in y_pred]
+        return class_pred

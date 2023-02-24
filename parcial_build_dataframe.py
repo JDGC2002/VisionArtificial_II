@@ -50,7 +50,7 @@ def build_dataset():
 
 def main():
     df = build_dataset()
-    df.to_csv("dataset_imagenes.csv", sep=";", index=False, header=False)
+    df.to_csv("dataset_imagenes.csv", sep=";", index=False)
 
 if __name__ == '__main__':
     main()
